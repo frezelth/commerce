@@ -1,9 +1,9 @@
 import { Product } from '@commerce/types'
+import { CommerceError } from '@commerce/utils/errors'
 
 import {
   ProductInterface as Magento2Product,
   MediaGalleryInterface,
-  ProductImage,
   Money,
   Maybe,
 } from '../schema'
@@ -12,8 +12,8 @@ import {
 
 const money = ({ currency, value }: Money) => {
   return {
-    value,
-    currencyCode: currency,
+    value: value!,
+    currencyCode: currency?.toString()!,
   }
 }
 
@@ -41,10 +41,23 @@ const money = ({ currency, value }: Money) => {
   }
 }*/
 
-const normalizeProductImages = (o?: Maybe<Maybe<MediaGalleryInterface>[]>) =>
-  o?.map(({ ...rest }) => ({
-    ...rest,
-  }))
+const test = (img: MediaGalleryInterface | null) => {
+  return {
+    url: img?.url!,
+  }
+}
+
+const normalizeProductImages = (
+  o?: Maybe<Array<Maybe<MediaGalleryInterface>>>
+) => {
+  if (!o) {
+    throw new CommerceError({
+      message: 'Invalid response from Magento',
+    })
+  }
+  const img = o
+  return img.map(test)
+}
 
 /*const normalizeProductImages = (o: MediaGalleryInterface[]) =>
   o as ProductImage*/
@@ -84,6 +97,9 @@ export function normalizeProduct(productNode: Magento2Product): Product {
     ...rest
   } = productNode
 
+  const gallery = media_gallery!
+  const gal = gallery!
+
   const product = {
     id: uid,
     name: name!,
@@ -92,10 +108,9 @@ export function normalizeProduct(productNode: Magento2Product): Product {
     path: `/${url_key}.${url_suffix}`,
     slug: url_key!,
     price: money(price_range?.minimum_price?.final_price),
-    images: normalizeProductImages(media_gallery),
+    images: normalizeProductImages(media_gallery!),
     variants: [],
     options: [],
-    ...rest,
   }
 
   return product
