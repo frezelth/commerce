@@ -1,0 +1,6 @@
+{
+  "provider": "magento2",
+  "features": {
+    "wishlist": false
+  }
+}

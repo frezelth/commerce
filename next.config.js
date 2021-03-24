@@ -3,6 +3,7 @@ const withCommerceConfig = require('./framework/commerce/with-config')
 
 const isBC = commerce.provider === 'bigcommerce'
 const isShopify = commerce.provider === 'shopify'
+const isMagento2 = commerce.provider === 'magento2'
 
 module.exports = withCommerceConfig({
   commerce,

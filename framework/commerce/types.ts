@@ -194,7 +194,7 @@ interface ProductVariant2 {
 
 interface ProductPrice {
   value: number
-  currencyCode: 'USD' | 'ARS' | string | undefined
+  currencyCode: 'USD' | 'ARS' | 'EUR' | string | undefined
   retailPrice?: number
   salePrice?: number
   listPrice?: number
