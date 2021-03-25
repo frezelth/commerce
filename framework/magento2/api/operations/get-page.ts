@@ -1,7 +1,7 @@
-import { Page } from '../../schema'
+import { CmsPage } from '../../schema'
 import { Magento2Config, getConfig } from '..'
 
-export type GetPageResult<T extends { page?: any } = { page?: Page }> = T
+export type GetPageResult<T extends { page?: any } = { page?: CmsPage }> = T
 
 export type PageVariables = {
   id: string

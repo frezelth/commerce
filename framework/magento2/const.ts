@@ -1,6 +1,6 @@
-export const MAGENTO2_CHECKOUT_ID_COOKIE = 'shopify_checkoutId'
+export const MAGENTO2_CHECKOUT_ID_COOKIE = 'magento_checkoutId'
 
-export const MAGENTO2_CHECKOUT_URL_COOKIE = 'shopify_checkoutUrl'
+export const MAGENTO2_CHECKOUT_URL_COOKIE = 'magento_checkoutUrl'
 
 export const MAGENTO2_CUSTOMER_TOKEN_COOKIE = 'magento_customerToken'
 
