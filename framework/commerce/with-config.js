@@ -4,7 +4,7 @@
 
 const merge = require('deepmerge')
 
-const PROVIDERS = ['bigcommerce', 'shopify']
+const PROVIDERS = ['bigcommerce', 'shopify', 'magento2']
 
 function getProviderName() {
   // TODO: OSOT.
