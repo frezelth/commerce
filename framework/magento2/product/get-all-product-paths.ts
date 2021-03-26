@@ -21,7 +21,7 @@ const getAllProductPaths = async (options?: {
   config?: Magento2Config
   preview?: boolean
 }): Promise<ReturnType> => {
-  let { config, variables = { first: 250 } } = options ?? {}
+  let { config, variables = { pageSize: 250 } } = options ?? {}
   config = getConfig(config)
 
   const products = await fetchAllProducts({

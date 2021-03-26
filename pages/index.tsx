@@ -21,15 +21,12 @@ export async function getStaticProps({
     preview,
   })
 
-  const { categories, brands } = await getSiteInfo({ config, preview })
-  const { pages } = await getAllPages({ config, preview })
+  /*const { categories, brands } = await getSiteInfo({ config, preview })*/
+  /*const { pages } = await getAllPages({ config, preview })*/
 
   return {
     props: {
       products,
-      categories,
-      brands,
-      pages,
     },
     revalidate: 14400,
   }
@@ -37,8 +34,6 @@ export async function getStaticProps({
 
 export default function Home({
   products,
-  brands,
-  categories,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>

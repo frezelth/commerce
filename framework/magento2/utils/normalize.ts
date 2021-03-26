@@ -15,6 +15,7 @@ import {
 const money = ({ currency, value }: Money) => {
   return {
     value: value!,
+    retailPrice: value!,
     currencyCode: currency?.toString()!,
   }
 }

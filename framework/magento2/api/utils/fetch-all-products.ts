@@ -6,33 +6,31 @@ const fetchAllProducts = async ({
   query,
   variables,
   acc = [],
-  cursor,
+  currentPage,
 }: {
   config: Magento2Config
   query: string
   acc?: ProductInterface[]
   variables?: any
-  cursor?: string
+  currentPage?: number
 }): Promise<ProductInterface[]> => {
   const { data } = await config.fetch(query, {
-    variables: { ...variables, cursor },
+    variables: { ...variables, currentPage },
   })
 
-  const edges: ProductInterface[] = data.products?.edges ?? []
-  const hasNextPage = data.products?.pageInfo?.hasNextPage
-  acc = acc.concat(edges)
+  const items: ProductInterface[] = data.items ?? []
+  const hasNextPage = data.page_info?.current_page < data.page_info?.total_pages
+  acc = acc.concat(items)
 
   if (hasNextPage) {
-    const cursor = 'true'
-    if (cursor) {
-      return fetchAllProducts({
-        config,
-        query,
-        variables,
-        acc,
-        cursor,
-      })
-    }
+    const nextPage = currentPage ?? 0
+    return fetchAllProducts({
+      config,
+      query,
+      variables,
+      acc,
+      currentPage: nextPage,
+    })
   }
 
   return acc

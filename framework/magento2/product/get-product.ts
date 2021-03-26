@@ -1,4 +1,5 @@
 import { GraphQLFetcherResult } from '@commerce/api'
+import getFromUrl from '@framework/common/get-from-url'
 import { getConfig, Magento2Config } from '../api'
 import { normalizeProduct, getProductQuery } from '../utils'
 
@@ -18,15 +19,13 @@ const getProduct = async (options: {
   let { config, variables } = options ?? {}
   config = getConfig(config)
 
+  /*const entity = await getFromUrl({variables : {url: variables.slug + ".html"}, config, preview: options.preview})*/
+
   const { data }: GraphQLFetcherResult = await config.fetch(getProductQuery, {
     variables,
   })
 
-  const { productByHandle: product } = data
-
-  return {
-    product: product ? normalizeProduct(product) : null,
-  }
+  return data.products?.items?.map(normalizeProduct)[0] ?? null
 }
 
 export default getProduct

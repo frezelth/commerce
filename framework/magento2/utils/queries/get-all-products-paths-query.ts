@@ -1,15 +1,17 @@
 const getAllProductsPathsQuery = /* GraphQL */ `
-  query getAllProductPaths($first: Int = 250, $cursor: String) {
-    products(first: $first, after: $cursor) {
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
+  query getAllProductPaths(
+    $pageSize: Int = 250
+    $currentPage: Int
+    $search: String = ""
+  ) {
+    products(pageSize: $pageSize, currentPage: $currentPage, search: $search) {
+      page_info {
+        current_page
+        page_size
+        total_pages
       }
-      edges {
-        node {
-          handle
-        }
-        cursor
+      items {
+        url_key
       }
     }
   }

@@ -7,9 +7,9 @@ page_info {
 items {
   uid
   name
-  vendor
   sku
   url_key
+  manufacturer
   url_suffix
   description {
     html
