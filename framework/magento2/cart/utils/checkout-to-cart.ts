@@ -1,18 +1,18 @@
-import { Cart } from '../../types'
+import { Cart } from '@commerce/types'
 import { CommerceError, ValidationError } from '@commerce/utils/errors'
 
 import {
-  CheckoutLineItemsAddPayload,
-  CheckoutLineItemsRemovePayload,
-  CheckoutLineItemsUpdatePayload,
+  AddProductsToCartOutput,
   Maybe,
+  RemoveItemFromCartOutput,
+  UpdateCartItemsOutput,
 } from '../../schema'
 import { normalizeCart } from '../../utils'
 
 export type CheckoutPayload =
-  | CheckoutLineItemsAddPayload
-  | CheckoutLineItemsUpdatePayload
-  | CheckoutLineItemsRemovePayload
+  | AddProductsToCartOutput
+  | UpdateCartItemsOutput
+  | RemoveItemFromCartOutput
 
 const checkoutToCart = (checkoutPayload?: Maybe<CheckoutPayload>): Cart => {
   if (!checkoutPayload) {
@@ -21,14 +21,14 @@ const checkoutToCart = (checkoutPayload?: Maybe<CheckoutPayload>): Cart => {
     })
   }
 
-  const checkout = checkoutPayload?.checkout
-  const userErrors = checkoutPayload?.userErrors
+  const checkout = checkoutPayload?.cart
+  /*const userErrors = checkoutPayload?.userErrors
 
   if (userErrors && userErrors.length) {
     throw new ValidationError({
       message: userErrors[0].message,
     })
-  }
+  }*/
 
   if (!checkout) {
     throw new CommerceError({

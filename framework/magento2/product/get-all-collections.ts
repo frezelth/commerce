@@ -1,23 +1,23 @@
-import { CollectionEdge } from '../schema'
-import { getConfig, ShopifyConfig } from '../api'
+import { CategoryTree } from '../schema'
+import { getConfig, Magento2Config } from '../api'
 import getAllCollectionsQuery from '../utils/queries/get-all-collections-query'
 
 const getAllCollections = async (options?: {
   variables?: any
-  config: ShopifyConfig
+  config: Magento2Config
   preview?: boolean
 }) => {
   let { config, variables = { first: 250 } } = options ?? {}
   config = getConfig(config)
 
   const { data } = await config.fetch(getAllCollectionsQuery, { variables })
-  const edges = data.collections?.edges ?? []
+  const edges = data.categoryList ?? []
 
   const categories = edges.map(
-    ({ node: { id: entityId, title: name, handle } }: CollectionEdge) => ({
+    ({ id: entityId, name, url_path }: CategoryTree) => ({
       entityId,
       name,
-      path: `/${handle}`,
+      path: url_path,
     })
   )
 

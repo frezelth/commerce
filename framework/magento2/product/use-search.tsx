@@ -1,11 +1,10 @@
 import { SWRHook } from '@commerce/utils/types'
 import useSearch, { UseSearch } from '@commerce/product/use-search'
 
-import { ProductEdge } from '../schema'
+import { ProductInterface } from '../schema'
 import {
   getAllProductsQuery,
   getCollectionProductsQuery,
-  getSearchVariables,
   normalizeProduct,
 } from '../utils'
 
@@ -39,7 +38,7 @@ export const handler: SWRHook<
     const data = await fetch({
       query: categoryId ? getCollectionProductsQuery : options.query,
       method: options?.method,
-      variables: getSearchVariables(input),
+      variables: [],
     })
 
     let edges
@@ -47,16 +46,14 @@ export const handler: SWRHook<
     if (categoryId) {
       edges = data.node?.products?.edges ?? []
       if (brandId) {
-        edges = edges.filter(
-          ({ node: { vendor } }: ProductEdge) => vendor === brandId
-        )
+        edges = edges.filter((o: ProductInterface) => true)
       }
     } else {
       edges = data.products?.edges ?? []
     }
 
     return {
-      products: edges.map(({ node }: ProductEdge) => normalizeProduct(node)),
+      products: edges.map((o: ProductInterface) => normalizeProduct(o)),
       found: !!edges.length,
     }
   },

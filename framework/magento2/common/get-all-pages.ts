@@ -1,5 +1,5 @@
-import { getConfig, ShopifyConfig } from '../api'
-import { PageEdge } from '../schema'
+import { getConfig, Magento2Config } from '../api'
+import { CmsPage } from '../schema'
 import { getAllPagesQuery } from '../utils/queries'
 
 type Variables = {
@@ -20,7 +20,7 @@ export type Page = {
 
 const getAllPages = async (options?: {
   variables?: Variables
-  config: ShopifyConfig
+  config: Magento2Config
   preview?: boolean
 }): Promise<ReturnType> => {
   let { config, variables = { first: 250 } } = options ?? {}
@@ -28,13 +28,9 @@ const getAllPages = async (options?: {
   const { locale } = config
   const { data } = await config.fetch(getAllPagesQuery, { variables })
 
-  const pages = data.pages?.edges?.map(
-    ({ node: { title: name, handle, ...node } }: PageEdge) => ({
-      ...node,
-      url: `/${locale}/${handle}`,
-      name,
-    })
-  )
+  const pages = data.pages?.edges?.map(({ ...args }: CmsPage) => ({
+    ...args,
+  }))
 
   return { pages }
 }

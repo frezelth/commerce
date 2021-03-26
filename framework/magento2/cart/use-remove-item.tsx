@@ -16,7 +16,7 @@ import useCart from './use-cart'
 import { checkoutLineItemRemoveMutation, getCheckoutId } from '../utils'
 import { checkoutToCart } from './utils'
 import { Cart, LineItem } from '../types'
-import { Mutation, MutationCheckoutLineItemsRemoveArgs } from '../schema'
+import { Mutation, MutationRemoveItemFromCartArgs } from '../schema'
 import { RemoveCartItemBody } from '@commerce/types'
 
 export type RemoveItemFn<T = any> = T extends LineItem
@@ -38,11 +38,11 @@ export const handler = {
     options,
     fetch,
   }: HookFetcherContext<RemoveCartItemBody>) {
-    const data = await fetch<Mutation, MutationCheckoutLineItemsRemoveArgs>({
+    const data = await fetch<Mutation, MutationRemoveItemFromCartArgs>({
       ...options,
       variables: { checkoutId: getCheckoutId(), lineItemIds: [itemId] },
     })
-    return checkoutToCart(data.checkoutLineItemsRemove)
+    return checkoutToCart(data.removeItemFromCart)
   },
   useHook: ({
     fetch,

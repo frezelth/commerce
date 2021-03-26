@@ -1,4 +1,4 @@
-import { Product } from '@commerce/types'
+import { Product, Cart as CommerceCart, LineItem } from '@commerce/types'
 import { CommerceError } from '@commerce/utils/errors'
 
 import {
@@ -6,6 +6,8 @@ import {
   MediaGalleryInterface,
   Money,
   Maybe,
+  Cart,
+  CartItemInterface,
 } from '../schema'
 
 /*import type { Cart, LineItem } from '../types'*/
@@ -41,7 +43,7 @@ const money = ({ currency, value }: Money) => {
   }
 }*/
 
-const test = (img: MediaGalleryInterface | null) => {
+const buildImage = (img: MediaGalleryInterface | null) => {
   return {
     url: img?.url!,
   }
@@ -56,7 +58,7 @@ const normalizeProductImages = (
     })
   }
   const img = o
-  return img.map(test)
+  return img?.map(buildImage)
 }
 
 /*const normalizeProductImages = (o: MediaGalleryInterface[]) =>
@@ -116,50 +118,44 @@ export function normalizeProduct(productNode: Magento2Product): Product {
   return product
 }
 
-/*export function normalizeCart(checkout: Checkout): Cart {
+export function normalizeCart(checkout: Cart): CommerceCart {
+  //const items: CartItemInterface[] = checkout.items!;
   return {
     id: checkout.id,
     customerId: '',
     email: '',
-    createdAt: checkout.createdAt,
+    createdAt: '',
     currency: {
-      code: checkout.totalPriceV2?.currencyCode,
+      code: checkout.prices?.grand_total?.currency?.toString()!,
     },
-    taxesIncluded: checkout.taxesIncluded,
-    lineItems: checkout.lineItems?.edges.map(normalizeLineItem),
-    lineItemsSubtotalPrice: +checkout.subtotalPriceV2?.amount,
-    subtotalPrice: +checkout.subtotalPriceV2?.amount,
-    totalPrice: checkout.totalPriceV2?.amount,
+    taxesIncluded: true,
+    lineItems: checkout.items?.map(normalizeLineItem)!,
+    lineItemsSubtotalPrice: 0,
+    subtotalPrice: 0,
+    totalPrice: 0,
     discounts: [],
   }
 }
 
-function normalizeLineItem({
-  node: { id, title, variant, quantity },
-}: CheckoutLineItemEdge): LineItem {
+function normalizeLineItem(item: Maybe<CartItemInterface>): LineItem {
   return {
-    id,
-    variantId: String(variant?.id),
-    productId: String(variant?.id),
-    name: `${title}`,
-    quantity,
+    id: item?.uid!,
+    variantId: item?.product.uid!,
+    productId: item?.product.uid!,
+    name: `${item?.product.name}`,
+    quantity: item?.quantity!,
     variant: {
-      id: String(variant?.id),
-      sku: variant?.sku ?? '',
-      name: variant?.title!,
+      id: item?.product.uid!,
+      sku: item?.product.sku ?? '',
+      name: item?.product.name!,
       image: {
-        url: variant?.image?.originalSrc,
+        url: item?.product.image?.url!,
       },
-      requiresShipping: variant?.requiresShipping ?? false,
-      price: variant?.priceV2?.amount,
-      listPrice: variant?.compareAtPriceV2?.amount,
+      requiresShipping: true,
+      price: item?.product.price_range.minimum_price.final_price.value!,
+      listPrice: item?.product.price_range.minimum_price.final_price.value!,
     },
     path: '',
     discounts: [],
-    options: [
-      {
-        value: variant?.title,
-      },
-    ],
   }
-}*/
+}

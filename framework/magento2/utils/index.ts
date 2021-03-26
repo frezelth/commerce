@@ -1,4 +1,7 @@
 export { default as handleFetchResponse } from './handle-fetch-response'
+export { default as getCheckoutId } from './get-checkout-id'
+export { default as getCategories } from './get-categories'
 export * from './queries'
+export * from './mutations'
 export * from './customer-token'
 export * from './normalize'

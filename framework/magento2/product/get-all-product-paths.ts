@@ -1,7 +1,7 @@
 import { Product } from '@commerce/types'
-import { getConfig, ShopifyConfig } from '../api'
+import { getConfig, Magento2Config } from '../api'
 import fetchAllProducts from '../api/utils/fetch-all-products'
-import { ProductEdge } from '../schema'
+import { ProductInterface } from '../schema'
 import getAllProductsPathsQuery from '../utils/queries/get-all-products-paths-query'
 
 type ProductPath = {
@@ -18,7 +18,7 @@ type ReturnType = {
 
 const getAllProductPaths = async (options?: {
   variables?: any
-  config?: ShopifyConfig
+  config?: Magento2Config
   preview?: boolean
 }): Promise<ReturnType> => {
   let { config, variables = { first: 250 } } = options ?? {}
@@ -31,9 +31,9 @@ const getAllProductPaths = async (options?: {
   })
 
   return {
-    products: products?.map(({ node: { handle } }: ProductEdge) => ({
+    products: products?.map(({ url_key: url }: ProductInterface) => ({
       node: {
-        path: `/${handle}`,
+        path: url!,
       },
     })),
   }

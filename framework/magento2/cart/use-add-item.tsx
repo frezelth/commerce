@@ -5,7 +5,7 @@ import useCart from './use-cart'
 import { Cart, CartItemBody } from '../types'
 import { checkoutLineItemAddMutation, getCheckoutId } from '../utils'
 import { checkoutToCart } from './utils'
-import { Mutation, MutationCheckoutLineItemsAddArgs } from '../schema'
+import { Mutation, MutationAddProductsToCartArgs } from '../schema'
 import { useCallback } from 'react'
 
 export default useAddItem as UseAddItem<typeof handler>
@@ -24,13 +24,13 @@ export const handler: MutationHook<Cart, {}, CartItemBody> = {
       })
     }
 
-    const { checkoutLineItemsAdd } = await fetch<
+    const { addProductsToCart } = await fetch<
       Mutation,
-      MutationCheckoutLineItemsAddArgs
+      MutationAddProductsToCartArgs
     >({
       ...options,
       variables: {
-        checkoutId: getCheckoutId(),
+        cartId: getCheckoutId(),
         lineItems: [
           {
             variantId: item.variantId,
@@ -41,7 +41,7 @@ export const handler: MutationHook<Cart, {}, CartItemBody> = {
     })
 
     // TODO: Fix this Cart type here
-    return checkoutToCart(checkoutLineItemsAdd) as any
+    return checkoutToCart(addProductsToCart) as any
   },
   useHook: ({ fetch }) => () => {
     const { mutate } = useCart()
