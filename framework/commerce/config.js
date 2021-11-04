@@ -15,6 +15,7 @@ const PROVIDERS = [
   'swell',
   'vendure',
   'ordercloud',
+  'magento2',
 ]
 
 function getProviderName() {

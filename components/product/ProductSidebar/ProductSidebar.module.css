@@ -44,8 +44,8 @@
   @apply text-center;
 }
 
-.imageContainer > div,
-.imageContainer > div > div {
+.imageContainer > span,
+.imageContainer > span > span {
   @apply h-full;
 }
 

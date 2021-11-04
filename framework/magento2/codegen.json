@@ -1,0 +1,16 @@
+{
+  "schema": {
+    "http://ip232.ip-137-74-247.eu/graphql": {}
+  },
+  "generates": {
+    "./framework/magento2/schema.d.ts": {
+      "plugins": ["typescript", "typescript-operations"]
+    },
+    "./framework/magento2/schema.graphql": {
+      "plugins": ["schema-ast"]
+    }
+  },
+  "hooks": {
+    "afterAllFileWrite": ["prettier --write"]
+  }
+}
