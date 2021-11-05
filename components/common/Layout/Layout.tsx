@@ -16,6 +16,8 @@ import CheckoutSidebarView from '@components/checkout/CheckoutSidebarView'
 
 import LoginView from '@components/auth/LoginView'
 import s from './Layout.module.css'
+import Link from 'next/link'
+import {LinkProps} from "next/dist/client/link";
 
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
@@ -90,21 +92,47 @@ const SidebarUI: FC = () => {
   ) : null
 }
 
+
+
+function mapRootCategoryToMenu(c: Category) : any {
+  return {
+    name: c.name,
+    href: `/collections/${c.slug}`,
+    featured: c.children?.filter(category => (category.image)).map(
+      category => ({
+        name: category.name,
+        href: `/collections/${c.slug}`,
+        imageSrc: category.image
+      })
+    ),
+    sections: c.children?.filter(category => (!category.image)).map(
+      category => ({
+        name: category.name,
+        href: `/collections/${c.slug}`,
+        items: category.children?.map(
+          child => ({
+            name: child.name,
+            href: `/collections/${child.slug}`
+          })
+        )
+      })
+    )
+  }
+}
+
 const Layout: FC<Props> = ({
   children,
   pageProps: { categories = [], ...pageProps },
 }) => {
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
-  const navBarlinks = categories.slice(0, 2).map((c) => ({
-    label: c.name,
-    href: `/search/${c.slug}`,
-  }))
+  const navigation = { categories: categories.map(mapRootCategoryToMenu)}
 
+  // const menus = categories.map(mapRootCategoryToMenu)
   return (
     <CommerceProvider locale={locale}>
       <div className={cn(s.root)}>
-        <Navbar links={navBarlinks} />
+        <Navbar navigation={navigation} />
         <main className="fit">{children}</main>
         <Footer pages={pageProps.pages} />
         <ModalUI />

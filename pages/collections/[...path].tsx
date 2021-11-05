@@ -1,17 +1,41 @@
-import commerce from '@lib/api/commerce'
-import { Layout } from '@components/common'
-import Image from 'next/image'
-import { ProductCard } from '@components/product'
-import { Grid, Marquee, Hero } from '@components/ui'
-// import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
-import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
-import styles from '../styles/Home.module.css'
+import {getSearchStaticProps} from '@lib/search-props'
+import type {GetStaticPropsContext} from 'next'
+import Search from '@components/search'
+import commerce from "@lib/api/commerce";
+import {Category} from "@commerce/types/site";
+import {InferGetStaticPropsType} from "next";
+import Image from "next/image";
+import styles from "../../styles/Home.module.css";
+import {Layout} from "@components/common";
+
+const flatten = (data: any[]) => {
+  return data.reduce((r, { children, ...rest}) => {
+    r.push(rest);
+    if (children) r.push(...flatten(children));
+    return r;
+  }, [])
+}
+
+export const getStaticPaths = async () => {
+  const { categories, vendors } = await commerce.getSiteInfo({}, false)
+
+  const flat = flatten(categories)
+
+  const paths = flat.map(obj => ({params: { path: obj.path.split("/")}}))
+
+  console.log(paths)
+
+  return {
+    paths: paths,
+    fallback: 'blocking',
+  }
+}
 
 export async function getStaticProps({
-  preview,
-  locale,
-  locales,
-}: GetStaticPropsContext) {
+                                       preview,
+                                       locale,
+                                       locales,
+                                     }: GetStaticPropsContext) {
   const config = { locale, locales }
   const productsPromise = commerce.getAllProducts({
     variables: { first: 6 },
@@ -38,8 +62,8 @@ export async function getStaticProps({
 }
 
 export default function Home({
-  products,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+                               products,
+                             }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <div className="hidden md:block">

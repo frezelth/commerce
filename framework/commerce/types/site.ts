@@ -3,6 +3,8 @@ export type Category = {
   name: string
   slug: string
   path: string
+  image?: string
+  children?: Category[]
 }
 
 export type Brand = any
