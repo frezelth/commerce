@@ -1,11 +1,6 @@
-import {getSearchStaticProps} from '@lib/search-props'
 import type {GetStaticPropsContext} from 'next'
-import Search from '@components/search'
-import commerce from "@lib/api/commerce";
-import {Category} from "@commerce/types/site";
 import {InferGetStaticPropsType} from "next";
-import Image from "next/image";
-import styles from "../../styles/Home.module.css";
+import commerce from "@lib/api/commerce";
 import {Layout} from "@components/common";
 
 const flatten = (data: any[]) => {
@@ -18,12 +13,8 @@ const flatten = (data: any[]) => {
 
 export const getStaticPaths = async () => {
   const { categories, vendors } = await commerce.getSiteInfo({}, false)
-
   const flat = flatten(categories)
-
-  const paths = flat.map(obj => ({params: { path: obj.path.split("/")}}))
-
-  console.log(paths)
+  const paths = flat.map((obj : any) => ({params: { path: obj.path.split("/")}}))
 
   return {
     paths: paths,
@@ -33,16 +24,18 @@ export const getStaticPaths = async () => {
 
 export async function getStaticProps({
                                        preview,
+                                       params,
                                        locale,
                                        locales,
                                      }: GetStaticPropsContext) {
   const config = { locale, locales }
+
+  // find category id from path
+
   const productsPromise = commerce.getAllProducts({
-    variables: { first: 6 },
+    variables: { categoryFilter: 6 },
     config,
     preview,
-    // Saleor provider only
-    ...({ featured: true } as any),
   })
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
@@ -65,19 +58,27 @@ export default function Home({
                                products,
                              }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <>
-      <div className="hidden md:block">
-        <Image src="/images/home/home_banner_202110.jpg" width={2480} height={1470}/>
-      </div>
-      <div className={'block md:hidden ' + styles.banner}>
-        <div className="absolute left-0 top-0">
-          <Image src="/images/home/home_mobile_homme_202110_1.jpg" width={1103} height={1470}/>
+    <div className="bg-white">
+      <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+        <h2 className="sr-only">Products</h2>
+
+        <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+          {products.map((product : any) => (
+            <a key={product.id} href={product.href} className="group">
+              <div className="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                <img
+                  src={product.imageSrc}
+                  alt={product.imageAlt}
+                  className="w-full h-full object-center object-cover group-hover:opacity-75"
+                />
+              </div>
+              <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
+              <p className="mt-1 text-lg font-medium text-gray-900">{product.price}</p>
+            </a>
+          ))}
         </div>
-        <div className="absolute left-0 top-0">
-          <Image className={styles.image2} src="/images/home/home_mobile_homme_202110_2.jpg" width={1103} height={1470}/>
-        </div>
       </div>
-    </>
+    </div>
   )
 }
 

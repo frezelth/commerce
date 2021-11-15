@@ -353,7 +353,7 @@ const Navbar: FC<NavbarProps> = ({ navigation }) => {
     // log the current open state in React (toggle open state)
     setOpenState((openState) => !openState)
     // toggle the menu by clicking on buttonRef
-    openedButton?.current?.click() // eslint-disable-line
+    openedButton?.current?.click()
   }
 
   // Open the menu after a delay of timeoutDuration

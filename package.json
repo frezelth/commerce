@@ -21,8 +21,12 @@
     "node": ">=14.x"
   },
   "dependencies": {
+    "@headlessui/react": "^1.4.1",
+    "@heroicons/react": "^1.0.5",
     "@react-spring/web": "^9.2.1",
-    "@vercel/fetch": "^6.1.0",
+    "@tailwindcss/aspect-ratio": "^0.3.0",
+    "@tailwindcss/forms": "^0.3.4",
+    "@vercel/fetch": "^6.1.1",
     "autoprefixer": "^10.2.6",
     "body-scroll-lock": "^3.1.5",
     "classnames": "^2.3.1",
@@ -49,10 +53,6 @@
     "swr": "^0.5.6",
     "tabbable": "^5.2.0",
     "tailwindcss": "^2.2.17",
-    "@headlessui/react": "^1.4.1",
-    "@heroicons/react": "^1.0.5",
-    "@tailwindcss/aspect-ratio": "^0.3.0",
-    "@tailwindcss/forms": "^0.3.4",
     "uuidv4": "^6.2.10"
   },
   "devDependencies": {
@@ -69,6 +69,7 @@
     "@types/lodash.throttle": "^4.1.6",
     "@types/node": "^15.12.4",
     "@types/react": "^17.0.8",
+    "cross-env": "^7.0.3",
     "deepmerge": "^4.2.2",
     "eslint": "^7.31.0",
     "eslint-config-next": "^11.0.1",
@@ -79,8 +80,7 @@
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.3.0",
-    "typescript": "4.3.4",
-    "cross-env": "^7.0.3"
+    "typescript": "4.3.4"
   },
   "husky": {
     "hooks": {
