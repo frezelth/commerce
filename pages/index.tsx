@@ -22,7 +22,8 @@ export async function getStaticProps({
   })
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { products } = await productsPromise
+  // const { products } = await productsPromise
+  const products = {}
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
 

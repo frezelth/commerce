@@ -17,7 +17,7 @@
 }
 
 .imageContainer {
-  @apply text-center;
+  @apply text-center h-full relative;
 }
 
 .imageContainer > span,
@@ -26,7 +26,7 @@
 }
 
 .sliderContainer .img {
-  @apply w-full h-auto max-h-full object-cover;
+  @apply w-full h-full max-h-full object-cover;
 }
 
 .button {
